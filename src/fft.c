@@ -533,3 +533,33 @@ double *zero_reals(int n) {
 	return result;
 }
 
+/**
+ * void abs_dft_interval(const double *signal, double *abs_power_interval, int n, int interval_start, int interval_stop)
+ * @brief This is used in preprocess_core.c in preprocess-daemon
+ */
+void abs_dft_interval(const double *signal, double *abs_power_interval, int n, int interval_start, int interval_stop){
+	
+	int k;
+	int coef_idx = 0;
+	
+	/*loop through all coefficients*/
+	for (k = interval_start; k < interval_stop; k++) {
+		
+		/*computing registers*/
+		double sumreal = 0;
+		double sumimag = 0;
+		int t;
+		
+		/*compute each terms*/
+		for(t = 0; t < n; t++) {
+			double angle = -2*M_PI * ((long long)t * k % n) / n;
+			sumreal += signal[t]*cos(angle);
+			sumimag += signal[t]*sin(angle);
+		}
+		
+		/*compute 2*real value, to get abs fft*/
+		abs_power_interval[coef_idx] = 2*sqrt(sumreal*sumreal+sumimag*sumimag)/n;
+		coef_idx++;
+	}
+}  
+

@@ -142,3 +142,8 @@ int convolve_complex(const double xreal[], const double ximag[], const double yr
 
 double *zero_reals(int n);
 void *memdup(const void *src, size_t n);
+
+/*
+ * This function is called from preprocess_core.c in preprocess-daemon
+ */
+void abs_dft_interval(const double *signal, double *abs_power_interval, int n, int interval_start, int interval_stop);
